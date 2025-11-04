@@ -1,0 +1,25 @@
+name: Update Tokens
+
+on:
+  repository_dispatch:
+    types: [update-tokens]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Print payload
+        run: |
+          echo "Payload: ${{ toJson(github.event.client_payload) }}"
+
+      - name: Update tokens file
+        run: |
+          echo "${{ toJson(github.event.client_payload.tokens) }}" > tokens.json
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add tokens.json
+          git commit -m "${{ github.event.client_payload.commit_message }}"
+          git push
