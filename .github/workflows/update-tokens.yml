@@ -24,6 +24,10 @@ jobs:
           FILENAME="${{ github.event.client_payload.filename }}"
           if [ -z "$FILENAME" ]; then FILENAME="tokens.json"; fi
 
+          # Configure Git
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
           # Write tokens string to file
           echo '${{ github.event.client_payload.tokens }}' > "$FILENAME"
 
