@@ -53,4 +53,9 @@ jobs:
           if [ -z "$FILENAME" ]; then FILENAME="tokens.json"; fi
           
           echo "Parsing filename: $FILENAME"
-          npx ts-node parse-json.ts "$FILENAME"    
+          npx ts-node parse-json.ts "$FILENAME"
+          
+          # Commit the prettified file
+          git add pretty-*.json
+          git commit -m "Add prettified JSON file" || echo "No changes to commit"
+          git push  
