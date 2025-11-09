@@ -10,7 +10,7 @@ if (!filename) {
 }
 
 try {
-  console.log(`📄 Reading file: ${filename}`);
+  console.log(`Reading file: ${filename}`);
   
   // Step 1: Read the raw JSON file
   const rawLine = fs.readFileSync(filename, "utf-8");
