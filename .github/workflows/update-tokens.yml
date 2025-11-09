@@ -55,7 +55,15 @@ jobs:
           echo "Parsing filename: $FILENAME"
           npx ts-node parse-json.ts "$FILENAME"
           
-          # Commit the prettified file
-          git add pretty-*.json
-          git commit -m "Add prettified JSON file" || echo "No changes to commit"
-          git push  
+          # Commit the prettified file if it exists
+          if ls pretty-*.json 1> /dev/null 2>&1; then
+            git add pretty-*.json
+            if git diff --staged --quiet; then
+              echo "No changes to commit"
+            else
+              git commit -m "Add prettified JSON file"
+              git push
+            fi
+          else
+            echo "No pretty file generated"
+          fi
