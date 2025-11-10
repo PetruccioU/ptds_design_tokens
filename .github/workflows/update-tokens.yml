@@ -70,8 +70,8 @@ jobs:
           npx ts-node parse-json.ts "$FILENAME"
           
           # Commit the prettified file if it exists
-          if ls pretty-*.json 1> /dev/null 2>&1; then
-            git add pretty-*.json
+          if ls formatted-*.json 1> /dev/null 2>&1; then
+            git add formatted-*.json
             if git diff --staged --quiet; then
               echo "No changes to commit"
             else
@@ -79,5 +79,5 @@ jobs:
               git push --set-upstream origin HEAD
             fi
           else
-            echo "No pretty file generated"
+            echo "No formatted file generated"
           fi
