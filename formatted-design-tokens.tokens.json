@@ -788,7 +788,7 @@
     "colors": {
       "black": {
         "type": "color",
-        "value": "#000000ff",
+        "value": "#da5454ff",
         "blendMode": "normal"
       },
       "white": {
@@ -799,7 +799,7 @@
       "gray": {
         "100": {
           "type": "color",
-          "value": "#f7fafcff",
+          "value": "#bfd7e6ff",
           "blendMode": "normal"
         },
         "200": {
