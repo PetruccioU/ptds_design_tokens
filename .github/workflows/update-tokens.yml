@@ -15,21 +15,21 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create and checkout date-time branch
-        run: |
+        env:
           # Create branch name with current date-time
-          BRANCH_NAME="tokens-$(date +'%Y%m%d-%H%M%S')"
+          BRANCH_NAME: "tokens-$(date +'%Y%m%d-%H%M%S')"
+        run: |
           echo "Creating branch: $BRANCH_NAME"
-          
-          # Configure Git
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          
-          # Create and checkout new branch
           git checkout -b "$BRANCH_NAME"
 
       - name: Print payload
+        env:
+          # printing entire payload for debugging
+          PAYLOAD: ${{ toJson(github.event.client_payload) }}
         run: |
-          echo "Payload: ${{ toJson(github.event.client_payload) }}"
+          echo "Payload: $PAYLOAD"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -40,20 +40,17 @@ jobs:
         run: npm install
 
       - name: Update tokens file
+        env:
+          TOKENS: "${{ github.event.client_payload.tokens }}"
         run: |
-          # Extract filename or use default
-          FILENAME="${{ github.event.client_payload.filename }}"
-          if [ -z "$FILENAME" ]; then FILENAME="tokens.json"; fi
+          FILEPATH="src/DesignTokens/tokens.json"
+          COMMIT_MSG="Update design tokens"
 
           # Write tokens string to file
-          echo '${{ github.event.client_payload.tokens }}' > "$FILENAME"
-
-          # Commit with provided message or fallback
-          COMMIT_MSG="${{ github.event.client_payload.commitMessage }}"
-          if [ -z "$COMMIT_MSG" ]; then COMMIT_MSG="Update design tokens"; fi
+          echo "$TOKENS" > "$FILEPATH"
 
           # Only commit if there are changes
-          git add "$FILENAME"
+          git add "$FILEPATH"
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
@@ -61,21 +58,19 @@ jobs:
             git push --set-upstream origin HEAD
           fi
 
-      - name: Parse and prettify JSON
+      - name: Parse and format JSON
         run: |
-          FILENAME="${{ github.event.client_payload.filename }}"
-          if [ -z "$FILENAME" ]; then FILENAME="tokens.json"; fi
-          
-          echo "Parsing filename: $FILENAME"
-          npx ts-node parse-json.ts "$FILENAME"
-          
-          # Commit the prettified file if it exists
-          if ls formatted-*.json 1> /dev/null 2>&1; then
-            git add formatted-*.json
+          FILEPATH="src/DesignTokens/tokens.json"
+          echo "Formatting filename: $FILEPATH"
+          npx ts-node src/DesignTokens/parse-json.ts "$FILEPATH"
+
+          # Commit the formatted file if it exists
+          if ls src/DesignTokens/formatted-*.json 1> /dev/null 2>&1; then
+            git add src/DesignTokens/formatted-*.json
             if git diff --staged --quiet; then
               echo "No changes to commit"
             else
-              git commit -m "Add prettified JSON file"
+              git commit -m "Add formatted JSON file"
               git push --set-upstream origin HEAD
             fi
           else
