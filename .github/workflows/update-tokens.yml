@@ -49,6 +49,9 @@ jobs:
           FILEPATH="src/DesignTokens/tokens.json"
           COMMIT_MSG="Update design tokens"
 
+          # Create directory if it doesn't exist
+          mkdir -p "$(dirname "$FILEPATH")"
+
           # Write tokens string to file
           echo "$TOKENS" > "$FILEPATH"
 
