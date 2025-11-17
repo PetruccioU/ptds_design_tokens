@@ -68,7 +68,7 @@ jobs:
         run: |
           FILEPATH="src/DesignTokens/tokens.json"
           echo "Formatting filename: $FILEPATH"
-          npx ts-node src/DesignTokens/parse-json.ts "$FILEPATH"
+          npx ts-node parse-json.ts "$FILEPATH"
 
           # Commit the formatted file if it exists
           if ls src/DesignTokens/formatted-*.json 1> /dev/null 2>&1; then
