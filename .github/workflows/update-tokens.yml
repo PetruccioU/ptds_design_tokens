@@ -44,7 +44,7 @@ jobs:
 
       - name: Update tokens file
         env:
-          TOKENS: "${{ toJson(github.event.client_payload.tokens) }}"
+          TOKENS: "${{ github.event.client_payload.tokens }}"
         run: |
           FILEPATH="src/DesignTokens/tokens.json"
           COMMIT_MSG="Update design tokens"
@@ -61,5 +61,20 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "$COMMIT_MSG"
+            git push --set-upstream origin HEAD
+          fi
+
+      - name: Parse and format JSON
+        run: |
+          FILEPATH="src/DesignTokens/tokens.json"
+          echo "Formatting filename: $FILEPATH"
+          npx ts-node parse-json.ts "$FILEPATH"
+
+          # Commit the formatted file
+          git add src/DesignTokens/formatted-*.json
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Add formatted JSON file"
             git push --set-upstream origin HEAD
           fi
