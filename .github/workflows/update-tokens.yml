@@ -31,6 +31,12 @@ jobs:
         env:
           TOKENS: "${{ github.event.client_payload.tokens }}"
         run: |
+          # Check for dangerous patterns in TOKENS
+          if echo "$TOKENS" | grep -E -i '(<script>|</script>|;|&&|\||`|\\|\/)' ; then
+            echo "Error: TOKENS contains potentially dangerous content."
+            exit 1
+          fi
+
           FILEPATH="src/DesignTokens/tokens.json"
           COMMIT_MSG="Update design tokens"
 
