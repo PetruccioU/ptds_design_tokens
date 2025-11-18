@@ -66,9 +66,7 @@ jobs:
 
       - name: Parse and format JSON
         run: |
-          TOKENS="src/DesignTokens/tokens.json"
-          echo "Formatting filename: $TOKENS"
-          npx ts-node src/DesignTokens/parse-json.ts "$TOKENS"
+          npx ts-node src/DesignTokens/parse-json.ts
 
           # Commit the formatted file
           git add src/DesignTokens/formatted-tokens.json
