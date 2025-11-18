@@ -27,6 +27,17 @@ jobs:
           # Create and checkout new branch
           git checkout -b "$BRANCH_NAME"
 
+      - name: Validate request
+        env:
+          SECRET: "${{ github.event.client_payload.secret }}"
+          EXPECTED_SECRET: "${{ secrets.FIGMA_WEBHOOK_SECRET }}"
+        run: |
+          if [ "$SECRET" != "$EXPECTED_SECRET" ]; then
+            echo "Error: Invalid secret"
+            exit 1
+          fi
+          echo "Request validated"
+
       - name: Update tokens file
         env:
           TOKENS: "${{ github.event.client_payload.tokens }}"
