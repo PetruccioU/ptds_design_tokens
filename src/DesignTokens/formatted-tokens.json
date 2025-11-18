@@ -788,12 +788,12 @@
     "colors": {
       "black": {
         "type": "color",
-        "value": "#000000ff",
+        "value": "#b92020ff",
         "blendMode": "normal"
       },
       "white": {
         "type": "color",
-        "value": "#ffffffff",
+        "value": "#8c4141ff",
         "blendMode": "normal"
       },
       "gray": {
