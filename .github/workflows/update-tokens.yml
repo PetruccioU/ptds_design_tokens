@@ -52,8 +52,13 @@ jobs:
           # Create directory if it doesn't exist
           mkdir -p "$(dirname "$FILEPATH")"
 
-          # Write tokens string to file
-          echo "$TOKENS" > "$FILEPATH"
+          # Validate and write tokens (echo with quotes preserves the string, then validate with jq)
+          echo "$TOKENS" | jq '.' > "$FILEPATH"
+          
+          if [ $? -ne 0 ]; then
+            echo "Error: Invalid JSON received"
+            exit 1
+          fi
 
           # Only commit if there are changes
           git add "$FILEPATH"
