@@ -22,7 +22,7 @@ try {
   const formattedJson = JSON.stringify(data, null, 2);
 
   // Step 4: Write it to a new file with "formatted-" prefix
-  const outputFileName = `./formatted-${filename.split("/").pop()}`;
+  const outputFileName = `./src/DesignTokens/formatted-${filename.split("/").pop()}`;
   fs.writeFileSync(outputFileName, formattedJson, "utf-8");
 
   console.log(`Formatted JSON saved as ${outputFileName}`);
