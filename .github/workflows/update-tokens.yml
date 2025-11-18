@@ -27,21 +27,6 @@ jobs:
           # Create and checkout new branch
           git checkout -b "$BRANCH_NAME"
 
-      - name: Print payload
-        env:
-          # printing entire payload for debugging
-          PAYLOAD: ${{ toJson(github.event.client_payload) }}
-        run: |
-          echo "Payload: $PAYLOAD"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
       - name: Update tokens file
         env:
           TOKENS: "${{ github.event.client_payload.tokens }}"
